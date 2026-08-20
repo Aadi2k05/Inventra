@@ -42,6 +42,25 @@ public class ReorderService {
         DemandForecastResponse forecast =
                 forecastService.forecast(productId, 7);
 
+        if (!forecast.isDataSufficient()) {
+            return new ReorderRecommendationResponse(
+                    product.getId(),
+                    product.getSku(),
+                    product.getName(),
+                    product.getStockQuantity(),
+                    product.getReorderLevel(),
+                    product.getLeadTimeDays() == null
+                            ? 7
+                            : product.getLeadTimeDays(),
+                    forecast.getPredictedDailyDemand(),
+                    0,
+                    product.getReorderLevel(),
+                    0,
+                    false,
+                    "Insufficient historical sales data for a reliable reorder recommendation."
+            );
+        }
+
         double predictedDailyDemand =
                 forecast.getPredictedDailyDemand();
 

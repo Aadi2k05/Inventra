@@ -43,10 +43,23 @@ public class ForecastService {
                         from,
                         to
                 );
+        boolean dataSufficient = dailySales.size() >= 7;
+
+        String confidence;
+
+        if (dailySales.size() >= 30) {
+            confidence = "HIGH";
+        } else if (dailySales.size() >= 14) {
+            confidence = "MEDIUM";
+        } else if (dailySales.size() >= 7) {
+            confidence = "LOW";
+        } else {
+            confidence = "INSUFFICIENT";
+        }
 
         if (dailySales.isEmpty()) {
             throw new IllegalArgumentException(
-                    "Not enough sales data to generate forecast"
+                    "No historical sales data available for this product"
             );
         }
 
@@ -57,7 +70,9 @@ public class ForecastService {
                 productId,
                 to.plusDays(1),
                 dailySales.size(),
-                predictedDemand
+                predictedDemand,
+                dataSufficient,
+                confidence
         );
     }
 }

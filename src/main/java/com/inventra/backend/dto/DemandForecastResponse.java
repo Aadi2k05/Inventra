@@ -8,17 +8,23 @@ public class DemandForecastResponse {
     private LocalDate forecastDate;
     private int historicalDays;
     private double predictedDailyDemand;
+    private boolean dataSufficient;
+    private String confidence;
 
     public DemandForecastResponse(
             String productId,
             LocalDate forecastDate,
             int historicalDays,
-            double predictedDailyDemand
+            double predictedDailyDemand,
+            boolean dataSufficient,
+            String confidence
     ) {
         this.productId = productId;
         this.forecastDate = forecastDate;
         this.historicalDays = historicalDays;
         this.predictedDailyDemand = predictedDailyDemand;
+        this.dataSufficient = dataSufficient;
+        this.confidence = confidence;
     }
 
     public String getProductId() {
@@ -35,5 +41,13 @@ public class DemandForecastResponse {
 
     public double getPredictedDailyDemand() {
         return predictedDailyDemand;
+    }
+
+    public boolean isDataSufficient() {
+        return dataSufficient;
+    }
+
+    public String getConfidence() {
+        return confidence;
     }
 }
