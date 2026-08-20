@@ -7,6 +7,7 @@ import com.inventra.backend.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class ProductController {
     @GetMapping
     public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    @GetMapping("/low-stock")
+    public List<ProductResponse> getLowStockProducts() {
+        return productService.getLowStockProducts();
     }
 
     @GetMapping("/{id}")
