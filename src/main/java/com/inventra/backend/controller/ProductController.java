@@ -1,6 +1,7 @@
 package com.inventra.backend.controller;
 
 import com.inventra.backend.dto.ProductRequest;
+import com.inventra.backend.dto.ProductResponse;
 import com.inventra.backend.model.Product;
 import com.inventra.backend.service.ProductService;
 import jakarta.validation.Valid;
@@ -21,11 +22,17 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@Valid @RequestBody ProductRequest productRequest) {
+    public ProductResponse createProduct(@Valid @RequestBody ProductRequest productRequest) {
         return productService.createProduct(productRequest);
     }
+
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         return productService.getAllProducts();
+    }
+
+    @GetMapping("/{id}")
+    public ProductResponse getProductById(@PathVariable String id) {
+        return productService.getProductById(id);
     }
 }

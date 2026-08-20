@@ -36,6 +36,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
     }
+
     @ExceptionHandler(DuplicateSkuException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiErrorResponse handleDuplicateSkuException(
@@ -43,6 +44,19 @@ public class GlobalExceptionHandler {
     ) {
         return new ApiErrorResponse(
                 HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiErrorResponse handleProductNotFoundException(
+            ProductNotFoundException exception
+    ) {
+        return new ApiErrorResponse(
+                HttpStatus.NOT_FOUND.value(),
                 exception.getMessage(),
                 null,
                 LocalDateTime.now()
