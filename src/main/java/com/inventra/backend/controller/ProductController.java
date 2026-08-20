@@ -1,7 +1,9 @@
 package com.inventra.backend.controller;
 
+import com.inventra.backend.dto.ProductRequest;
 import com.inventra.backend.model.Product;
 import com.inventra.backend.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +21,8 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(product);
+    public Product createProduct(@Valid @RequestBody ProductRequest productRequest) {
+        return productService.createProduct(productRequest);
     }
     @GetMapping
     public List<Product> getAllProducts() {
