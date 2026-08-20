@@ -1,6 +1,7 @@
 package com.inventra.backend.service;
 
 import com.inventra.backend.dto.ProductRequest;
+import com.inventra.backend.exception.DuplicateSkuException;
 import com.inventra.backend.model.Product;
 import com.inventra.backend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,12 @@ public class ProductService {
     }
 
     public Product createProduct(ProductRequest productRequest) {
+
+        if (productRepository.existsBySku(productRequest.getSku())) {
+            throw new DuplicateSkuException(
+                    "Product with SKU '" + productRequest.getSku() + "' already exists"
+            );
+        }
 
         Product product = new Product();
 

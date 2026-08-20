@@ -3,6 +3,7 @@ package com.inventra.backend.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,18 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST.value(),
                 "Validation failed",
                 errors,
+                LocalDateTime.now()
+        );
+    }
+    @ExceptionHandler(DuplicateSkuException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiErrorResponse handleDuplicateSkuException(
+            DuplicateSkuException exception
+    ) {
+        return new ApiErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                null,
                 LocalDateTime.now()
         );
     }

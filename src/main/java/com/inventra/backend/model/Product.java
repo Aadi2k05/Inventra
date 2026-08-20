@@ -2,6 +2,7 @@ package com.inventra.backend.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 @Document(collection = "products")
 public class Product {
@@ -9,6 +10,7 @@ public class Product {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String sku;
     private String name;
     private String category;
