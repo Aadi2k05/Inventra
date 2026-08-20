@@ -2,8 +2,9 @@ package com.inventra.backend.service;
 
 import com.inventra.backend.dto.DailySalesResponse;
 import com.inventra.backend.dto.DemandForecastResponse;
+import com.inventra.backend.forecast.ForecastEngine;
 import org.springframework.stereotype.Service;
-
+import com.inventra.backend.forecast.ForecastEngine;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,8 +13,13 @@ public class ForecastService {
 
     private final AnalyticsService analyticsService;
 
-    public ForecastService(AnalyticsService analyticsService) {
+    private final ForecastEngine forecastEngine;
+    public ForecastService(
+            AnalyticsService analyticsService,
+            ForecastEngine forecastEngine
+    ) {
         this.analyticsService = analyticsService;
+        this.forecastEngine = forecastEngine;
     }
 
     public DemandForecastResponse forecast(
@@ -44,16 +50,14 @@ public class ForecastService {
             );
         }
 
-        double averageDemand = dailySales.stream()
-                .mapToLong(DailySalesResponse::getUnitsSold)
-                .average()
-                .orElse(0.0);
+        double predictedDemand =
+                forecastEngine.forecast(dailySales);
 
         return new DemandForecastResponse(
                 productId,
                 to.plusDays(1),
                 dailySales.size(),
-                averageDemand
+                predictedDemand
         );
     }
 }
