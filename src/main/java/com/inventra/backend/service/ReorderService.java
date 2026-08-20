@@ -2,6 +2,7 @@ package com.inventra.backend.service;
 
 import com.inventra.backend.dto.DemandForecastResponse;
 import com.inventra.backend.dto.ReorderRecommendationResponse;
+import com.inventra.backend.exception.ProductNotFoundException;
 import com.inventra.backend.model.Product;
 import com.inventra.backend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class ReorderService {
 
         Product product = productRepository.findById(productId)
                 .orElseThrow(() ->
-                        new RuntimeException(
+                        new ProductNotFoundException(
                                 "Product with id '" +
                                         productId +
                                         "' not found"
