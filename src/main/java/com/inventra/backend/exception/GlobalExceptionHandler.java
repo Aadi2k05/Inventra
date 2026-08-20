@@ -62,4 +62,17 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
     }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiErrorResponse handleInsufficientStockException(
+            InsufficientStockException exception
+    ) {
+        return new ApiErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                null,
+                LocalDateTime.now()
+        );
+    }
 }

@@ -69,4 +69,12 @@ public class ProductService {
                 .map(this::mapToResponse)
                 .toList();
     }
+
+    public List<ProductResponse> getLowStockProducts() {
+
+        return productRepository.findLowStockProducts()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
 }
