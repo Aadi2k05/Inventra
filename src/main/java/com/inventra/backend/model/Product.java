@@ -17,6 +17,7 @@ public class Product {
     private double price;
     private int stockQuantity;
     private int reorderLevel;
+    private Integer leadTimeDays;
 
     public Product() {
     }
@@ -81,5 +82,11 @@ public class Product {
 
     public void setReorderLevel(int reorderLevel) {
         this.reorderLevel = reorderLevel;
+    }
+    public Integer getLeadTimeDays() {
+        return leadTimeDays;
+    }
+    public void setLeadTimeDays(Integer leadTimeDays) {
+        this.leadTimeDays = leadTimeDays;
     }
 }
