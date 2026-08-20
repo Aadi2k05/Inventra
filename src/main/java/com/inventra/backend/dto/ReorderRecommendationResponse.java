@@ -17,6 +17,8 @@ public class ReorderRecommendationResponse {
 
     private boolean reorderRequired;
     private String recommendation;
+    private boolean dataSufficient;
+    private String confidence;
 
     public ReorderRecommendationResponse(
             String productId,
@@ -30,7 +32,9 @@ public class ReorderRecommendationResponse {
             Integer safetyStock,
             Integer recommendedOrderQuantity,
             boolean reorderRequired,
-            String recommendation
+            String recommendation,
+            boolean dataSufficient,
+            String confidence
     ) {
         this.productId = productId;
         this.sku = sku;
@@ -44,6 +48,8 @@ public class ReorderRecommendationResponse {
         this.recommendedOrderQuantity = recommendedOrderQuantity;
         this.reorderRequired = reorderRequired;
         this.recommendation = recommendation;
+        this.dataSufficient = dataSufficient;
+        this.confidence = confidence;
     }
 
     public String getProductId() {
@@ -92,5 +98,13 @@ public class ReorderRecommendationResponse {
 
     public String getRecommendation() {
         return recommendation;
+    }
+
+    public boolean isDataSufficient() {
+        return dataSufficient;
+    }
+
+    public String getConfidence() {
+        return confidence;
     }
 }

@@ -43,21 +43,22 @@ public class ReorderService {
                 forecastService.forecast(productId, 7);
 
         if (!forecast.isDataSufficient()) {
+
             return new ReorderRecommendationResponse(
                     product.getId(),
                     product.getSku(),
                     product.getName(),
                     product.getStockQuantity(),
                     product.getReorderLevel(),
-                    product.getLeadTimeDays() == null
-                            ? 7
-                            : product.getLeadTimeDays(),
+                    leadTimeDays,
                     forecast.getPredictedDailyDemand(),
                     0,
                     product.getReorderLevel(),
                     0,
                     false,
-                    "Insufficient historical sales data for a reliable reorder recommendation."
+                    "Insufficient historical sales data for a reliable reorder recommendation.",
+                    false,
+                    forecast.getConfidence()
             );
         }
 
@@ -115,7 +116,9 @@ public class ReorderService {
                 safetyStock,
                 recommendedOrderQuantity,
                 reorderRequired,
-                recommendation
+                recommendation,
+                forecast.isDataSufficient(),
+                forecast.getConfidence()
         );
     }
 }
