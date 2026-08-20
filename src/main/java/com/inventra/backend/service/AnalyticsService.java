@@ -10,6 +10,7 @@ import com.inventra.backend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -56,7 +57,11 @@ public class AnalyticsService {
         );
     }
 
-    public List<DailySalesResponse> getDailySales(String productId) {
+    public List<DailySalesResponse> getDailySales(
+            String productId,
+            LocalDate from,
+            LocalDate to
+    ) {
 
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(
@@ -64,11 +69,26 @@ public class AnalyticsService {
             );
         }
 
+        if (from.isAfter(to)) {
+            throw new IllegalArgumentException(
+                    "'from' date cannot be after 'to' date"
+            );
+        }
+
+        LocalDateTime start = from.atStartOfDay();
+
+        LocalDateTime end = to
+                .plusDays(1)
+                .atStartOfDay()
+                .minusNanos(1);
+
         List<InventoryTransaction> sales =
                 inventoryTransactionRepository
-                        .findByProductIdAndTypeOrderByCreatedAtAsc(
+                        .findByProductIdAndTypeAndCreatedAtBetweenOrderByCreatedAtAsc(
                                 productId,
-                                InventoryTransactionType.SALE
+                                InventoryTransactionType.SALE,
+                                start,
+                                end
                         );
 
         Map<LocalDate, Long> dailySales = sales.stream()

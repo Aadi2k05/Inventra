@@ -3,6 +3,7 @@ package com.inventra.backend.repository;
 import com.inventra.backend.model.InventoryTransaction;
 import com.inventra.backend.model.InventoryTransactionType;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import java.time.LocalDateTime;
 
 import java.util.List;
 
@@ -21,5 +22,12 @@ public interface InventoryTransactionRepository
     List<InventoryTransaction> findByProductIdAndTypeOrderByCreatedAtAsc(
             String productId,
             InventoryTransactionType type
+    );
+
+    List<InventoryTransaction> findByProductIdAndTypeAndCreatedAtBetweenOrderByCreatedAtAsc(
+            String productId,
+            InventoryTransactionType type,
+            LocalDateTime from,
+            LocalDateTime to
     );
 }

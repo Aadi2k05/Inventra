@@ -4,6 +4,9 @@ import com.inventra.backend.dto.SalesAnalyticsResponse;
 import com.inventra.backend.service.AnalyticsService;
 import org.springframework.web.bind.annotation.*;
 import com.inventra.backend.dto.DailySalesResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,8 +28,14 @@ public class AnalyticsController {
 
     @GetMapping("/products/{productId}/daily-sales")
     public List<DailySalesResponse> getDailySales(
-            @PathVariable String productId
+            @PathVariable String productId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to
     ) {
-        return analyticsService.getDailySales(productId);
+        return analyticsService.getDailySales(
+                productId,
+                from,
+                to
+        );
     }
 }
