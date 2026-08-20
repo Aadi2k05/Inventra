@@ -17,4 +17,9 @@ public interface InventoryTransactionRepository
             String productId,
             InventoryTransactionType type
     );
+
+    List<InventoryTransaction> findByProductIdAndTypeOrderByCreatedAtAsc(
+            String productId,
+            InventoryTransactionType type
+    );
 }
