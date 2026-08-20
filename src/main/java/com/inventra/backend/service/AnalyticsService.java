@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -100,14 +101,27 @@ public class AnalyticsService {
                         )
                 ));
 
-        return dailySales.entrySet()
-                .stream()
-                .map(entry ->
-                        new DailySalesResponse(
-                                entry.getKey(),
-                                entry.getValue()
-                        )
-                )
-                .toList();
+        List<DailySalesResponse> result = new ArrayList<>();
+
+        LocalDate currentDate = from;
+
+        while (!currentDate.isAfter(to)) {
+
+            long unitsSold = dailySales.getOrDefault(
+                    currentDate,
+                    0L
+            );
+
+            result.add(
+                    new DailySalesResponse(
+                            currentDate,
+                            unitsSold
+                    )
+            );
+
+            currentDate = currentDate.plusDays(1);
+        }
+
+        return result;
     }
 }
