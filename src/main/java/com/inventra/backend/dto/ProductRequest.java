@@ -32,6 +32,9 @@ public class ProductRequest {
     @Min(value = 0, message = "Reorder level cannot be negative")
     private Integer reorderLevel;
 
+    @Min(value = 0, message = "Lead time cannot be negative")
+    private Integer leadTimeDays;
+
     public ProductRequest() {
     }
 
@@ -81,5 +84,13 @@ public class ProductRequest {
 
     public void setReorderLevel(Integer reorderLevel) {
         this.reorderLevel = reorderLevel;
+    }
+
+    public Integer getLeadTimeDays() {
+        return leadTimeDays;
+    }
+
+    public void setLeadTimeDays(Integer leadTimeDays) {
+        this.leadTimeDays = leadTimeDays;
     }
 }
