@@ -6,6 +6,7 @@ import com.inventra.backend.exception.ProductNotFoundException;
 import com.inventra.backend.model.Product;
 import com.inventra.backend.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import java.lang.Math;
 
 @Service
 public class ReorderService {
@@ -68,13 +69,19 @@ public class ReorderService {
         double leadTimeDemand =
                 predictedDailyDemand * leadTimeDays;
 
+        double serviceLevelZ = 1.65;
+
         int safetyStock =
-                Math.max(
-                        product.getReorderLevel(),
-                        (int) Math.ceil(
-                                predictedDailyDemand * 2
-                        )
+                (int) Math.ceil(
+                        serviceLevelZ
+                                * forecast.getDemandStandardDeviation()
+                                * Math.sqrt(leadTimeDays)
                 );
+
+        safetyStock = Math.max(
+                safetyStock,
+                product.getReorderLevel()
+        );
 
         int targetStock =
                 (int) Math.ceil(

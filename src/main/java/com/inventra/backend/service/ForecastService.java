@@ -4,7 +4,7 @@ import com.inventra.backend.dto.DailySalesResponse;
 import com.inventra.backend.dto.DemandForecastResponse;
 import com.inventra.backend.forecast.ForecastEngine;
 import org.springframework.stereotype.Service;
-import com.inventra.backend.forecast.ForecastEngine;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,8 +12,8 @@ import java.util.List;
 public class ForecastService {
 
     private final AnalyticsService analyticsService;
-
     private final ForecastEngine forecastEngine;
+
     public ForecastService(
             AnalyticsService analyticsService,
             ForecastEngine forecastEngine
@@ -43,7 +43,15 @@ public class ForecastService {
                         from,
                         to
                 );
-        boolean dataSufficient = dailySales.size() >= 7;
+
+        if (dailySales.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "No historical sales data available for this product"
+            );
+        }
+
+        boolean dataSufficient =
+                dailySales.size() >= 7;
 
         String confidence;
 
@@ -57,14 +65,11 @@ public class ForecastService {
             confidence = "INSUFFICIENT";
         }
 
-        if (dailySales.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "No historical sales data available for this product"
-            );
-        }
-
         double predictedDemand =
                 forecastEngine.forecast(dailySales);
+
+        double demandStandardDeviation =
+                calculateStandardDeviation(dailySales);
 
         return new DemandForecastResponse(
                 productId,
@@ -72,7 +77,34 @@ public class ForecastService {
                 dailySales.size(),
                 predictedDemand,
                 dataSufficient,
-                confidence
+                confidence,
+                demandStandardDeviation
         );
+    }
+
+    private double calculateStandardDeviation(
+            List<DailySalesResponse> dailySales
+    ) {
+
+        if (dailySales.size() <= 1) {
+            return 0.0;
+        }
+
+        double mean = dailySales.stream()
+                .mapToLong(DailySalesResponse::getUnitsSold)
+                .average()
+                .orElse(0.0);
+
+        double variance = dailySales.stream()
+                .mapToDouble(day ->
+                        Math.pow(
+                                day.getUnitsSold() - mean,
+                                2
+                        )
+                )
+                .sum()
+                / (dailySales.size() - 1);
+
+        return Math.sqrt(variance);
     }
 }
