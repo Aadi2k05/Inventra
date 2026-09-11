@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; import jakarta.validation.constraints.Min; import jakarta.validation.constraints.NotBlank; public record ReturnRequest(@NotBlank String orderId,@NotBlank String warehouseId,@NotBlank String productId,@Min(1) int quantity,@NotBlank String reason) {}

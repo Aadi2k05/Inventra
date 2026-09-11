@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; import com.inventra.backend.model.AlertType; import java.time.LocalDateTime; public record AlertResponse(String id,String productId,String warehouseId,AlertType type,String severity,String message,boolean acknowledged,LocalDateTime createdAt) {}
