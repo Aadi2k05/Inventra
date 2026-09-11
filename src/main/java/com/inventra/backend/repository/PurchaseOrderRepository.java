@@ -1,0 +1,1 @@
+package com.inventra.backend.repository; import com.inventra.backend.model.PurchaseOrder; import org.springframework.data.mongodb.repository.MongoRepository; import java.util.*; public interface PurchaseOrderRepository extends MongoRepository<PurchaseOrder,String> { Optional<PurchaseOrder> findByPoNumber(String poNumber); List<PurchaseOrder> findAllByOrderByCreatedAtDesc(); }

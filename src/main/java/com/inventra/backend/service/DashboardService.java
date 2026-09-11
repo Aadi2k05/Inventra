@@ -70,7 +70,8 @@ public class DashboardService {
                                 product.getCategory(),
                                 product.getPrice(),
                                 product.getStockQuantity(),
-                                product.getReorderLevel()
+                                product.getReorderLevel(),
+                                product.getLeadTimeDays()
                         )
                 )
                 .toList();

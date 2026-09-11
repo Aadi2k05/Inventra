@@ -27,6 +27,9 @@ public class InventoryService {
         this.inventoryTransactionRepository = inventoryTransactionRepository;
     }
 
+    /**
+     * Create an inventory transaction and automatically update stock.
+     */
     public InventoryTransactionResponse createTransaction(
             InventoryTransactionRequest request
     ) {
@@ -44,17 +47,22 @@ public class InventoryService {
 
         switch (request.getType()) {
 
-            case PURCHASE, RETURN, ADJUSTMENT ->
-                    product.setStockQuantity(
-                            product.getStockQuantity() + quantity
-                    );
+            case PURCHASE, RETURN, ADJUSTMENT -> {
+
+                product.setStockQuantity(
+                        product.getStockQuantity() + quantity
+                );
+            }
 
             case SALE, DAMAGE -> {
 
                 if (product.getStockQuantity() < quantity) {
+
                     throw new InsufficientStockException(
                             "Insufficient stock for product '" +
-                                    product.getSku() + "'"
+                                    product.getSku() +
+                                    "'. Available stock: " +
+                                    product.getStockQuantity()
                     );
                 }
 
@@ -64,9 +72,12 @@ public class InventoryService {
             }
         }
 
+        // Save updated stock.
         productRepository.save(product);
 
-        InventoryTransaction transaction = new InventoryTransaction();
+        // Create transaction record.
+        InventoryTransaction transaction =
+                new InventoryTransaction();
 
         transaction.setProductId(product.getId());
         transaction.setType(request.getType());
@@ -80,13 +91,37 @@ public class InventoryService {
         return mapToResponse(savedTransaction);
     }
 
+    /**
+     * Get every inventory transaction.
+     *
+     * New endpoint:
+     * GET /api/inventory/transactions
+     */
+    public List<InventoryTransactionResponse> getAllTransactions() {
+
+        return inventoryTransactionRepository
+                .findAllByOrderByCreatedAtDesc()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    /**
+     * Get transactions belonging to one product.
+     *
+     * Endpoint:
+     * GET /api/inventory/products/{productId}/transactions
+     */
     public List<InventoryTransactionResponse> getTransactionsByProductId(
             String productId
     ) {
 
         if (!productRepository.existsById(productId)) {
+
             throw new ProductNotFoundException(
-                    "Product with id '" + productId + "' not found"
+                    "Product with id '" +
+                            productId +
+                            "' not found"
             );
         }
 
@@ -97,9 +132,13 @@ public class InventoryService {
                 .toList();
     }
 
+    /**
+     * Convert MongoDB transaction entity into API response.
+     */
     private InventoryTransactionResponse mapToResponse(
             InventoryTransaction transaction
     ) {
+
         return new InventoryTransactionResponse(
                 transaction.getId(),
                 transaction.getProductId(),

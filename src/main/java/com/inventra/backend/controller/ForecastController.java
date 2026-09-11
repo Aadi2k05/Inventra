@@ -10,15 +10,18 @@ public class ForecastController {
 
     private final ForecastService forecastService;
 
-    public ForecastController(ForecastService forecastService) {
+    public ForecastController(
+            ForecastService forecastService
+    ) {
         this.forecastService = forecastService;
     }
 
     @GetMapping("/products/{productId}")
     public DemandForecastResponse forecast(
             @PathVariable String productId,
-            @RequestParam(defaultValue = "7") int days
+            @RequestParam(defaultValue = "30") int days
     ) {
+
         return forecastService.forecast(
                 productId,
                 days

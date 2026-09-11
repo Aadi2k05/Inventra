@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; import com.inventra.backend.model.OrderStatus; import java.time.LocalDateTime; import java.util.List; public record OrderResponse(String id,String orderNumber,String warehouseId,String customerName,List<com.inventra.backend.model.OrderItem> items,OrderStatus status,double totalAmount,LocalDateTime createdAt) {}

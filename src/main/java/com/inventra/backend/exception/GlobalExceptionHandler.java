@@ -75,4 +75,10 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now()
         );
     }
+    @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiErrorResponse handleBusinessException(Exception exception) {
+        return new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), null, LocalDateTime.now());
+    }
+
 }
