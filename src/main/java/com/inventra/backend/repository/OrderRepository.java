@@ -1,0 +1,1 @@
+package com.inventra.backend.repository; import com.inventra.backend.model.Order; import org.springframework.data.mongodb.repository.MongoRepository; import java.util.*; public interface OrderRepository extends MongoRepository<Order,String> { Optional<Order> findByOrderNumber(String orderNumber); List<Order> findAllByOrderByCreatedAtDesc(); }

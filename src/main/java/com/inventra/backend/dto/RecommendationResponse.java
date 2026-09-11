@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; public record RecommendationResponse(String productId,String sku,String productName,String category,double price,int currentStock,int reorderLevel,double predictedDailyDemand,int recommendedOrderQuantity,String reason) {}

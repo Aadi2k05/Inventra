@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; import jakarta.validation.Valid; import jakarta.validation.constraints.NotBlank; import jakarta.validation.constraints.NotEmpty; import java.util.List; public record PurchaseOrderRequest(@NotBlank String warehouseId,@NotBlank String supplierName,@NotEmpty List<@Valid PurchaseOrderItemRequest> items) {}

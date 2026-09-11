@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; import com.inventra.backend.model.StockMovementType; import java.time.LocalDateTime; public record StockMovementResponse(String id,String productId,String warehouseId,StockMovementType type,int quantity,int balanceAfter,String referenceId,String reason,LocalDateTime createdAt) {}

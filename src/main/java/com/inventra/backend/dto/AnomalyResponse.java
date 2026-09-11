@@ -1,0 +1,1 @@
+package com.inventra.backend.dto; public record AnomalyResponse(String productId,String sku,String productName,boolean anomaly,double averageDailySales,double recentDailySales,double deviationScore,String message) {}
